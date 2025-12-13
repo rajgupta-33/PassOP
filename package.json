@@ -1,13 +1,12 @@
 {
   "name": "passop",
   "version": "0.0.1",
-  "private": true,
   "homepage": "https://rajgupta-33.github.io/PassOP",
+  "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "react-scripts build",
+    "build": "vite build",
     "preview": "vite preview",
-    "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
