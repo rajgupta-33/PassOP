@@ -16,7 +16,7 @@ const Manager = () => {
     // Fetch passwords from backend API
     const getPasswords = async () => {
         try {
-            let req = await fetch("https://passop-zfj6.onrender.com");
+            let req = await fetch("https://passop-zfj6.onrender.com/api/passwords");
             let passwords = await req.json();
             setPasswordArray(passwords);
         } catch (err) {
@@ -60,11 +60,11 @@ const Manager = () => {
         if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3){
             // Remove if editing
             if (form.id) {
-                await fetch("https://passop-zfj6.onrender.com", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: form.id }) });
+                await fetch("https://passop-zfj6.onrender.com/api/passwords", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: form.id }) });
             }
             // Add new (keep id if editing, else generate new)
             const newPassword = { ...form, id: form.id ? form.id : uuidv4() };
-            await fetch("https://passop-zfj6.onrender.com", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newPassword) });
+            await fetch("https://passop-zfj6.onrender.com/api/passwords", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newPassword) });
             setform({ site: "", username: "", password: "" });
             toast('Password saved!', {
                 position: "top-right",
@@ -87,7 +87,7 @@ const Manager = () => {
         console.log("Deleting password with id ", id);
         let c = confirm("Do you really want to delete this password?");
         if(c){
-            await fetch("https://passop-zfj6.onrender.com", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
+            await fetch("https://passop-zfj6.onrender.com/api/passwords", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
             toast('Password Deleted!', {
                 position: "top-right",
                 autoClose: 5000,
