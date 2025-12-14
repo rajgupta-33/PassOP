@@ -8,7 +8,6 @@ const path = require('path')
 
 import authRoutes from "./routes/auth.js";
 import passwordRoutes from "./routes/passwords.js";
-import dotenv from "dotenv";
 
 dotenv.config();
 
