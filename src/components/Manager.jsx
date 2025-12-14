@@ -156,11 +156,11 @@ const Manager = () => {
                                 value={form.password}
                                 onChange={handleChange}
                                 placeholder='Enter Password'
-                                className='rounded-full border border-green-500 w-full p-4 py-1 appearance-none'
+                                className='rounded-full border border-green-500 w-full p-4 py-1 appearance-none no-browser-eye'
                                 type="password"
                                 name="password"
                                 id="password"
-                                autoComplete="off"
+                                autoComplete="new-password"
                             />
                             <span className='absolute right-[3px] top-[4px] cursor-pointer' onClick={showPassword}>
                                 <img ref={ref} className='p-1' width={26} src="icons/eye.png" alt="eye" />

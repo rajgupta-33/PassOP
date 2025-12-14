@@ -1,1 +1,9 @@
-/* Add your custom styles here or leave this file empty if you only use Tailwind CSS */
+.no-browser-eye::-ms-reveal,
+.no-browser-eye::-ms-clear {
+  display: none;
+}
+
+.no-browser-eye::-webkit-credentials-auto-fill-button,
+.no-browser-eye::-webkit-textfield-decoration-container {
+  display: none !important;
+}
