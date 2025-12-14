@@ -8,9 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "type": "module",
     "deploy": "gh-pages -d dist"
   },
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
