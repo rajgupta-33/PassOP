@@ -107,6 +107,7 @@ import path from "path";
 import authRoutes from "./routes/auth.js";
 import passwordRoutes from "./routes/passwords.js";
 
+
 dotenv.config();
 
 const app = express();
