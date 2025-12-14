@@ -10,16 +10,43 @@ const Manager = () => {
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setPasswordArray] = useState([])
 
+    // const getPasswords = async () => {
+    //     try {
+    //         let req = await fetch("http://localhost:3000/api/passwords");
+    //         let passwords = await req.json();
+    //         setPasswordArray(passwords);
+    //     } catch (err) {
+    //         console.error("Error fetching passwords:", err);
+    //         setPasswordArray([]);
+    //     }
+    // }
+    const token = localStorage.getItem("token");
+
+fetch("https://passop-zfj6.onrender.com/api/passwords", {
+  method: "GET", // ya POST, DELETE, jo bhi ho
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`  // yeh add karo
+  },
+  body: JSON.stringify(yourData), // agar POST/DELETE ho toh
+});
+
+
     const getPasswords = async () => {
         try {
-            let req = await fetch("http://localhost:3000/api/passwords");
-            let passwords = await req.json();
+            const token = localStorage.getItem("token");
+            const res = await fetch("https://passop-zfj6.onrender.com/api/passwords", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const passwords = await res.json();
             setPasswordArray(passwords);
         } catch (err) {
-            console.error("Error fetching passwords:", err);
             setPasswordArray([]);
         }
-    }
+    };
+
 
     useEffect(() => {
         getPasswords()
@@ -57,28 +84,28 @@ const Manager = () => {
             try {
                 // Remove if editing
                 if (form.id) {
-                    const deleteRes = await fetch("http://localhost:3000/api/passwords", { 
-                        method: "DELETE", 
-                        headers: { "Content-Type": "application/json" }, 
-                        body: JSON.stringify({ id: form.id }) 
+                    const deleteRes = await fetch("http://localhost:3000/api/passwords", {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: form.id })
                     });
                     if (!deleteRes.ok) {
                         throw new Error('Failed to delete old password');
                     }
                 }
-                
+
                 // Add new (keep id if editing, else generate new)
                 const newPassword = { ...form, id: form.id ? form.id : uuidv4() };
-                const saveRes = await fetch("http://localhost:3000/api/passwords", { 
-                    method: "POST", 
-                    headers: { "Content-Type": "application/json" }, 
-                    body: JSON.stringify(newPassword) 
+                const saveRes = await fetch("http://localhost:3000/api/passwords", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newPassword)
                 });
-                
+
                 if (!saveRes.ok) {
                     throw new Error('Failed to save password');
                 }
-                
+
                 setform({ site: "", username: "", password: "" });
                 toast.success('Password saved!', {
                     position: "top-right",
@@ -113,16 +140,16 @@ const Manager = () => {
         let c = confirm("Do you really want to delete this password?");
         if (c) {
             try {
-                const res = await fetch("http://localhost:3000/api/passwords", { 
-                    method: "DELETE", 
-                    headers: { "Content-Type": "application/json" }, 
-                    body: JSON.stringify({ id }) 
+                const res = await fetch("http://localhost:3000/api/passwords", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id })
                 });
-                
+
                 if (!res.ok) {
                     throw new Error('Failed to delete password');
                 }
-                
+
                 toast.success('Password Deleted!', {
                     position: "top-right",
                     autoClose: 5000,
