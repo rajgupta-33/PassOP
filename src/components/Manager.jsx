@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { useRef, useState, useEffect } from 'react';
-    // reverted: no show state
+// reverted: no show state
 import { ToastContainer, toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-toastify/dist/ReactToastify.css';
@@ -57,7 +57,7 @@ const Manager = () => {
 
 
     const savePassword = async () => {
-        if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3){
+        if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
             // Remove if editing
             if (form.id) {
                 await fetch("https://passop-zfj6.onrender.com/api/passwords", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: form.id }) });
@@ -86,7 +86,7 @@ const Manager = () => {
     const deletePassword = async (id) => {
         console.log("Deleting password with id ", id);
         let c = confirm("Do you really want to delete this password?");
-        if(c){
+        if (c) {
             await fetch("https://passop-zfj6.onrender.com/api/passwords", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
             toast('Password Deleted!', {
                 position: "top-right",
@@ -217,7 +217,10 @@ const Manager = () => {
                                     </td>
                                     <td className='py-2 border border-white text-center'>
                                         <div className='flex items-center justify-center '>
-                                            <span>{item.password}</span>
+                                            <span>
+                                                {"*".repeat(item.password.length)}
+                                            </span>
+
                                             <div className='lordiconcopy size-7 cursor-pointer' onClick={() => { copyText(item.password) }}>
                                                 <lord-icon
                                                     style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
@@ -228,18 +231,18 @@ const Manager = () => {
                                         </div>
                                     </td>
                                     <td className='justify-center py-2 border border-white text-center'>
-                                        <span className='cursor-pointer mx-1' onClick={()=>{editPassword(item.id)}}>
+                                        <span className='cursor-pointer mx-1' onClick={() => { editPassword(item.id) }}>
                                             <lord-icon
                                                 src="https://cdn.lordicon.com/gwlusjdu.json"
                                                 trigger="hover"
-                                                style={{"width":"25px", "height":"25px"}}>
+                                                style={{ "width": "25px", "height": "25px" }}>
                                             </lord-icon>
                                         </span>
-                                        <span className='cursor-pointer mx-1'onClick={()=>{deletePassword(item.id)}}>
+                                        <span className='cursor-pointer mx-1' onClick={() => { deletePassword(item.id) }}>
                                             <lord-icon
                                                 src="https://cdn.lordicon.com/skkahier.json"
                                                 trigger="hover"
-                                                style={{"width":"25px", "height":"25px"}}>
+                                                style={{ "width": "25px", "height": "25px" }}>
                                             </lord-icon>
                                         </span>
                                     </td>
