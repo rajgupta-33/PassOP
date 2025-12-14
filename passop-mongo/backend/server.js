@@ -105,7 +105,7 @@ import cors from "cors";
 import path from "path";
 
 import authRoutes from "./routes/auth.js";
-import passwordRoutes from "./routes/passwords.js";
+import passwordRoutes from "./routes/password.js";
 
 
 dotenv.config();
