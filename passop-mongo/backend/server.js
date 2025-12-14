@@ -6,7 +6,6 @@ const cors = require('cors')
 const path = require('path')
 
 
-import express from "express";
 import authRoutes from "./routes/auth.js";
 import passwordRoutes from "./routes/passwords.js";
 import dotenv from "dotenv";
