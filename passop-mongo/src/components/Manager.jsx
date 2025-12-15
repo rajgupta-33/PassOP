@@ -20,16 +20,6 @@ const Manager = () => {
     //         setPasswordArray([]);
     //     }
     // }
-    const token = localStorage.getItem("token");
-
-fetch("https://passop-zfj6.onrender.com/api/passwords", {
-  method: "GET", // ya POST, DELETE, jo bhi ho
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`  // yeh add karo
-  },
-  body: JSON.stringify(yourData), // agar POST/DELETE ho toh
-});
 
 
     const getPasswords = async () => {

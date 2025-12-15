@@ -1,144 +1,98 @@
-// const express = require('express')
-// const dotenv = require('dotenv')
-// const { MongoClient } = require('mongodb'); 
-// const bodyparser = require('body-parser')
-// const cors = require('cors')
-// const path = require('path')
+const express = require('express')
+const dotenv = require('dotenv')
+const { MongoClient } = require('mongodb')
+const cors = require('cors')
+const path = require('path')
 
+// Load environment variables from backend/.env (if present)
+dotenv.config({ path: path.join(__dirname, '.env') })
 
-// import authRoutes from "./routes/auth.js";
-// import passwordRoutes from "./routes/passwords.js";
+const app = express()
+app.use(express.json())
+app.use(cors())
 
-// dotenv.config();
+// Simple request logger
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()}  ${req.method} ${req.originalUrl}`)
+    next()
+})
 
-// app.use(express.json());
-
-// app.use("/api/auth", authRoutes);
-// app.use("/api/passwords", passwordRoutes);
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
-// app.use("/api/auth", authRoutes);
-// app.use("/api/passwords", passwordRoutes);
-
-// // Load environment variables from backend/.env
-// dotenv.config({ path: path.join(__dirname, '.env') })
-
-// // Connecting to the MongoDB Client
-// const url = process.env.MONGO_URI;
-// if (!url) {
-//     console.error('ERROR: MONGO_URI is not defined in .env file');
-//     process.exit(1);
-// }
-
-// const client = new MongoClient(url);
-
-// // Connect with error handling
-// client.connect()
-//     .then(() => console.log('✅ Connected to MongoDB'))
-//     .catch(err => {
-//         console.error('❌ MongoDB connection error:', err);
-//         process.exit(1);
-//     });
-
-// // App & Database
-// const dbName = process.env.DB_NAME || 'passop'
-// const app = express()
-// const port = 3000
-
-// console.log(`🔧 Using database: ${dbName}`)
-
-// // Middleware
-// app.use(bodyparser.json())
-// app.use(cors())
-
-// // Get all the passwords
-// app.get('/', async (req, res) => {
-//     const db = client.db(dbName);
-//     const collection = db.collection('passwords');
-//     const findResult = await collection.find({}).toArray();
-//     res.json(findResult)
-// })
-
-// // Save a password
-// app.post('/api/passwords', async (req, res) => { 
-//     const password = req.body
-//     const db = client.db(dbName);
-//     const collection = db.collection('passwords');
-//     const findResult = await collection.insertOne(password);
-//     res.send({success: true, result: findResult})
-// })
-    
-//     // GET route to fetch all passwords
-//     app.get('/api/passwords', async (req, res) => {
-//         const db = client.db(dbName);
-//         const collection = db.collection('passwords');
-//         const findResult = await collection.find({}).toArray();
-//         res.json(findResult);
-//     })
-
-// // Delete a password by id
-// app.delete('/api/passwords', async (req, res) => { 
-//     const { id } = req.body;
-//     const db = client.db(dbName);
-//     const collection = db.collection('passwords');
-//     const findResult = await collection.deleteOne({ id });
-//     res.send({success: true, result: findResult})
-// })
-
-// app.listen(port, () => {
-//     console.log(`🚀 Server running on http://localhost:${port}`)
-//     console.log(`📊 API endpoints:`)
-//     console.log(`   GET    http://localhost:${port}/api/passwords`)
-//     console.log(`   POST   http://localhost:${port}/api/passwords`)
-//     console.log(`   DELETE http://localhost:${port}/api/passwords`)
-// })
-
-import express from "express";
-import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
-import bodyparser from "body-parser";
-import cors from "cors";
-import path from "path";
-
-import authRoutes from "./routes/auth.js";
-import passwordRoutes from "./routes/password.js";
-
-
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(bodyparser.json());
-app.use(cors());
-app.use(express.json());
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/passwords", passwordRoutes);
-
-// MongoDB Connection
-const url = process.env.MONGO_URI;
+// MongoDB connection
+const url = process.env.MONGO_URI
 if (!url) {
-  console.error("ERROR: MONGO_URI is not defined in .env file");
-  process.exit(1);
+    console.error('ERROR: MONGO_URI is not defined in .env file')
+    process.exit(1)
 }
 
-const client = new MongoClient(url);
-
+const client = new MongoClient(url)
 client.connect()
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
-  });
+    .then(() => console.log('✅ Connected to MongoDB'))
+    .catch(err => {
+        console.error('❌ MongoDB connection error:', err)
+        process.exit(1)
+    })
 
-// Start server
+const dbName = process.env.DB_NAME || 'passop'
+console.log(`🔧 Using database: ${dbName}`)
+
+// Routes
+app.get('/', async (req, res, next) => {
+    try {
+        const db = client.db(dbName)
+        const collection = db.collection('passwords')
+        const findResult = await collection.find({}).toArray()
+        res.json(findResult)
+    } catch (err) {
+        next(err)
+    }
+})
+
+app.get('/api/passwords', async (req, res, next) => {
+    try {
+        const db = client.db(dbName)
+        const collection = db.collection('passwords')
+        const findResult = await collection.find({}).toArray()
+        res.json(findResult)
+    } catch (err) {
+        next(err)
+    }
+})
+
+app.post('/api/passwords', async (req, res, next) => {
+    try {
+        const password = req.body
+        const db = client.db(dbName)
+        const collection = db.collection('passwords')
+        const result = await collection.insertOne(password)
+        res.send({ success: true, result })
+    } catch (err) {
+        next(err)
+    }
+})
+
+app.delete('/api/passwords', async (req, res, next) => {
+    try {
+        const { id } = req.body
+        const db = client.db(dbName)
+        const collection = db.collection('passwords')
+        const result = await collection.deleteOne({ id })
+        res.send({ success: true, result })
+    } catch (err) {
+        next(err)
+    }
+})
+
+// Error handling middleware (must be after routes)
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err && (err.stack || err.message || err))
+    res.status(500).json({ success: false, error: (err && err.message) || 'Internal Server Error' })
+})
+
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+    console.log(`🚀 Server running on http://localhost:${PORT}`)
+    console.log(`📊 API endpoints:`)
+    console.log(`   GET    http://localhost:${PORT}/api/passwords`)
+    console.log(`   POST   http://localhost:${PORT}/api/passwords`)
+    console.log(`   DELETE http://localhost:${PORT}/api/passwords`)
+})

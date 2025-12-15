@@ -1,56 +1,51 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 const Login = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setLoading(true)
 
     try {
-      const res = await fetch("https://passop-zfj6.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        onLoginSuccess();  // Parent component ko bata dena ki login ho gaya
-      } else {
-        alert(data.error || "Login failed");
-      }
+      // If you later add real auth, replace this with a fetch to /api/auth
+      // For now, accept any non-empty credentials and store a demo token
+      if (!email || !password) throw new Error('Please enter email and password')
+      localStorage.setItem('token', 'demo-token')
+      onLoginSuccess && onLoginSuccess()
     } catch (err) {
-      alert("Server error");
+      alert(err.message || 'Login failed')
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: "300px", margin: "auto" }}>
-      <h2>Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        style={{ width: "100%", padding: "8px", marginBottom: "8px" }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        style={{ width: "100%", padding: "8px", marginBottom: "12px" }}
-      />
-      <button type="submit" style={{ width: "100%", padding: "10px", background: "green", color: "white", border: "none" }}>
-        Login
-      </button>
-    </form>
-  );
-};
+    <div className="min-h-[70vh] flex items-center justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded shadow">
+        <h2 className="text-xl font-bold mb-4">Login</h2>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full border rounded p-2 mb-3"
+          type="email"
+        />
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          className="w-full border rounded p-2 mb-4"
+          type="password"
+        />
+        <button disabled={loading} className="w-full bg-green-500 text-white p-2 rounded">
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+    </div>
+  )
+}
 
-export default Login;
+export default Login
