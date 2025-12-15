@@ -9,9 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "backend": "node ./backend/server.js",
-    "start:all": "concurrently \"npm run backend\" \"npm run dev\""
-  },
-  "scripts": {
+    "start:all": "concurrently \"npm run backend\" \"npm run dev\"",
     "remove-comments": "node ./scripts/remove_comments.js"
   },
   "dependencies": {
