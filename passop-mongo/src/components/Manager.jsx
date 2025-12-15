@@ -10,16 +10,15 @@ const Manager = () => {
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setPasswordArray] = useState([])
 
-    // const getPasswords = async () => {
-    //     try {
-    //         let req = await fetch("http://localhost:3000/api/passwords");
-    //         let passwords = await req.json();
-    //         setPasswordArray(passwords);
-    //     } catch (err) {
-    //         console.error("Error fetching passwords:", err);
-    //         setPasswordArray([]);
-    //     }
-    // }
+
+
+
+
+
+
+
+
+
 
 
     const getPasswords = async () => {
@@ -72,7 +71,7 @@ const Manager = () => {
     const savePassword = async () => {
         if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
             try {
-                // Remove if editing
+
                 if (form.id) {
                     const deleteRes = await fetch("http://localhost:3000/api/passwords", {
                         method: "DELETE",
@@ -84,7 +83,6 @@ const Manager = () => {
                     }
                 }
 
-                // Add new (keep id if editing, else generate new)
                 const newPassword = { ...form, id: form.id ? form.id : uuidv4() };
                 const saveRes = await fetch("http://localhost:3000/api/passwords", {
                     method: "POST",
@@ -166,7 +164,7 @@ const Manager = () => {
         console.log("Editing password with id ", id);
         const item = passwordArray.find(i => i.id === id);
         if (item) {
-            setform(item); // keep the original id
+            setform(item); 
         }
         setPasswordArray(passwordArray.filter(item => item.id !== id))
     }

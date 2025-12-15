@@ -11,6 +11,9 @@
     "backend": "node ./backend/server.js",
     "start:all": "concurrently \"npm run backend\" \"npm run dev\""
   },
+  "scripts": {
+    "remove-comments": "node ./scripts/remove_comments.js"
+  },
   "dependencies": {
     "mongodb": "^5.2.0",
     "cors": "^2.8.5",

@@ -9,9 +9,7 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault()
     setLoading(true)
 
-    try {
-      // If you later add real auth, replace this with a fetch to /api/auth
-      // For now, accept any non-empty credentials and store a demo token
+    try {
       if (!email || !password) throw new Error('Please enter email and password')
       localStorage.setItem('token', 'demo-token')
       onLoginSuccess && onLoginSuccess()

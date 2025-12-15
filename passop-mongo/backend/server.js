@@ -2,22 +2,16 @@ const express = require('express')
 const dotenv = require('dotenv')
 const { MongoClient } = require('mongodb')
 const cors = require('cors')
-const path = require('path')
-
-// Load environment variables from backend/.env (if present)
+const path = require('path')
 dotenv.config({ path: path.join(__dirname, '.env') })
 
 const app = express()
 app.use(express.json())
-app.use(cors())
-
-// Simple request logger
+app.use(cors())
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()}  ${req.method} ${req.originalUrl}`)
     next()
-})
-
-// MongoDB connection
+})
 const url = process.env.MONGO_URI
 if (!url) {
     console.error('ERROR: MONGO_URI is not defined in .env file')
@@ -33,9 +27,7 @@ client.connect()
     })
 
 const dbName = process.env.DB_NAME || 'passop'
-console.log(`🔧 Using database: ${dbName}`)
-
-// Routes
+console.log(`🔧 Using database: ${dbName}`)
 app.get('/', async (req, res, next) => {
     try {
         const db = client.db(dbName)
@@ -80,9 +72,7 @@ app.delete('/api/passwords', async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-})
-
-// Error handling middleware (must be after routes)
+})
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err && (err.stack || err.message || err))
     res.status(500).json({ success: false, error: (err && err.message) || 'Internal Server Error' })
