@@ -11,17 +11,7 @@ const Manager = () => {
     const [passwordArray, setPasswordArray] = useState([])
 
 
-
-
-
-
-
-
-
-
-
-
-    const getPasswords = async () => {
+const getPasswords = async () => {
         try {
             const token = localStorage.getItem("token");
             const res = await fetch("https://passop-zfj6.onrender.com/api/passwords", {
@@ -73,7 +63,7 @@ const Manager = () => {
             try {
 
                 if (form.id) {
-                    const deleteRes = await fetch("http://localhost:3000/api/passwords", {
+                    const deleteRes = await fetch("https://passop-zfj6.onrender.com/api/passwords", {
                         method: "DELETE",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ id: form.id })
@@ -84,7 +74,7 @@ const Manager = () => {
                 }
 
                 const newPassword = { ...form, id: form.id ? form.id : uuidv4() };
-                const saveRes = await fetch("http://localhost:3000/api/passwords", {
+                const saveRes = await fetch("https://passop-zfj6.onrender.com/api/passwords", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(newPassword)
@@ -128,7 +118,7 @@ const Manager = () => {
         let c = confirm("Do you really want to delete this password?");
         if (c) {
             try {
-                const res = await fetch("http://localhost:3000/api/passwords", {
+                const res = await fetch("https://passop-zfj6.onrender.com/api/passwords", {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id })

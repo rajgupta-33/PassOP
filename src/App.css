@@ -1,9 +1,10 @@
-.no-browser-eye::-ms-reveal,
-.no-browser-eye::-ms-clear {
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
   display: none;
 }
 
-.no-browser-eye::-webkit-credentials-auto-fill-button,
-.no-browser-eye::-webkit-textfield-decoration-container {
-  display: none !important;
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  visibility: hidden;
 }
